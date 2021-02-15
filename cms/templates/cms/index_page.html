@@ -3,8 +3,8 @@
 
 {% block content %}
 
-    {{page.main_body|richtext}}
-    {% for item in page.top_images.all %}
+    {{page.body|richtext}}
+    {% for item in page.index_images.all %}
         {% image item.image fill-400x300 %}
     {% endfor %}
 

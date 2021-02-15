@@ -2,42 +2,25 @@ from django.db import models
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from wagtail.core.models import Page, Orderable
-from wagtail.core.fields import RichTextField
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel
+from wagtail.core.fields import RichTextField, StreamField
+from wagtail.core.blocks import RawHTMLBlock, RichTextBlock
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 
 
 class TopPage(Page):
-    # cover_image = models.ForeignKey(
-    #     'wagtailimags.Image',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name='+',
-    # )
     intro = models.CharField(max_length=255)
     main_body = RichTextField(blank=True)
-    # side_image = models.ForeignKey(
-    #     'wagtailimages.Image',
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name='+',
-    # )
-    side_title = models.CharField(blank=True, max_length=255)
-    side_body = RichTextField(blank=True)
 
     content_panels = Page.content_panels + [
         FieldPanel('intro'),
         FieldPanel('main_body', classname="full"),
-        FieldPanel('side_title'),
-        FieldPanel('side_body', classname="full"),
-        InlinePanel('gallery_images', label="Gallery images"),
+        InlinePanel('top_images', label="Gallery images"),
     ]
 
 
 class TopPageGalleryImage(Orderable):
-    page = ParentalKey(TopPage, on_delete=models.CASCADE, related_name='gallery_images')
+    page = ParentalKey(TopPage, on_delete=models.CASCADE, related_name='top_images')
     image = models.ForeignKey(
         'wagtailimages.Image', on_delete=models.CASCADE, related_name='+',
     )
@@ -49,3 +32,22 @@ class TopPageGalleryImage(Orderable):
     ]
 
 
+class IndexPage(Page):
+    body = RichTextField(max_length=1000)
+
+    content_panels = Page.content_panels + [
+        FieldPanel('body'),
+        InlinePanel('index_images', label='Index images')
+    ]
+
+class IndexImages(Orderable):
+    page = ParentalKey(IndexPage, on_delete=models.CASCADE, related_name='index_images')
+    image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+    caption = models.CharField(max_length=1000, blank=True)
+
+    panels = [
+        ImageChooserPanel('image'),
+        FieldPanel('caption'),
+    ]
+
+# class ContentsPage(Page):
