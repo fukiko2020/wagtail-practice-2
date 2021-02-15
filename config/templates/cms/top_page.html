@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+
+    {{page.main_body|richtext}}
+    {% for item in page.gallery_images.all %}
+        {% image item.image fill-400x300 %}
+    {% endfor %}
+
+{% endblock %}
