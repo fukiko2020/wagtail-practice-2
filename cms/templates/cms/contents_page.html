@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+        {% for item in page.contents_images.all %}
+            {% image item.image fill-300x200 %}
+        {% endfor %}
+
+        {% for block in page.body %}
+            {% if block.block_type != 'image' %}
+                {% include_block block %}
+            {% endif %}
+        {% endfor %}
+
+{% endblock %}

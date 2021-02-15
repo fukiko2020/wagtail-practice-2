@@ -6,6 +6,7 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.core.blocks import RawHTMLBlock, RichTextBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.images.blocks import ImageChooserBlock
 
 
 class TopPage(Page):
@@ -50,4 +51,22 @@ class IndexImages(Orderable):
         FieldPanel('caption'),
     ]
 
-# class ContentsPage(Page):
+class ContentsPage(Page):
+    body = StreamField([
+        ('rich_text', RichTextBlock(icon='doc_full', label='Rich Text', required=False)),
+        ('html', RawHTMLBlock(icon='code', label='Raw HTML', required=False)),
+        ('image', ImageChooserBlock(label='Image', required=False)),
+    ])
+
+    content_panels = Page.content_panels + [
+        StreamFieldPanel('body'),
+        InlinePanel('contents_images', label='Contents images'),
+    ]
+
+class ContentsImages(Orderable):
+    page = ParentalKey(ContentsPage, on_delete=models.CASCADE, related_name='contents_images')
+    image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+
+    panels = [
+        ImageChooserPanel('image'),
+    ]
