@@ -20,50 +20,22 @@ class MyContentBlocks(blocks.StreamBlock):
     richtext = blocks.RichTextBlock()
 
 
-class MyColumnBlocks(blocks.StreamBlock):
-    """
-    All the root level blocks  you can use
-    """
-    column_2_1 = ColumnsBlock(
-        # Blocks you want to allow within each column
-        MyContentBlocks(),
-        # Two columns in admin, first twice as wide as the second
-        ratios=(2, 1),
-        # Used for grouping related fields in the streamfield field picker
-        group="Columns",
-        # 12 column frontend grid (this is the default, so can be omitted)
-        grid_width=12,
-        # Override the frontend template
-        template='home/blocks/two_column_block.html',
-    )
-
-
-class SidebarPage(Page):
-    content = fields.StreamField(MyColumnBlocks)
-
-    content_panels = [
-        FieldPanel('title'),
-        StreamFieldPanel('content'),
-    ]
-
-
-"""
 class ThreeColumnBlocks(blocks.StreamBlock):
     column_1_1_1 = ColumnsBlock(
         MyContentBlocks(),
         ratios=(1, 1, 1),
         group="Columns",
-        template='home/blocks/two_column_block.html',
+        template='home/blocks/three_column_block.html',
     )
 
 
-# class ThreeColumnPage(Page):
-#     content = fields.StreamField(ThreeColumnBlocks)
+class ThreeColumnPage(Page):
+    content = fields.StreamField(ThreeColumnBlocks)
 
-#     content_panels = [
-#         FieldPanel('title'),
-#         StreamFieldPanel('content')
-#     ]
+    content_panels = [
+        FieldPanel('title'),
+        StreamFieldPanel('content')
+    ]
 
 
 class TwoColumnBlocks(blocks.StreamBlock):
@@ -84,7 +56,6 @@ class MyColumnPage(Page):
         StreamFieldPanel('two_column'),
         StreamFieldPanel('three_column'),
     ]
-"""
 
 
 class HomePage(Page):

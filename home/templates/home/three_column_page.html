@@ -1,9 +1,13 @@
-{% extends "columnblocks_base.html" %}
+{% extends "base.html" %}
 {% load static %}
 {% load wagtailcore_tags %}
 
 {% block content %}
-<div class="row">
-    {{page.content}}
+<div class="container-fluid">
+
+    <!-- <div class="row"> -->
+        {{page.content}}
+    <!-- </div> -->
+
 </div>
 {% endblock content %}
