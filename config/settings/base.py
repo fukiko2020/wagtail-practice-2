@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'search',
     'cms',
 
+    'wagtailcolumnblocks',
+
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
     'wagtail.embeds',

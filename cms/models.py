@@ -70,3 +70,5 @@ class ContentsImages(Orderable):
     panels = [
         ImageChooserPanel('image'),
     ]
+
+

@@ -1,4 +1,4 @@
-#!/home/fkk/codes/wagtail_practice/wagtail-practice-2/.venv/bin/python3
+#!/home/fkk/codes/wagtail_practice/wagtail_site/.venv/bin/python3
 
 ##############################################################################
 #

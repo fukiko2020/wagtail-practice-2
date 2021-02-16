@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/fkk/codes/wagtail_practice/wagtail-practice-2/.venv"
+set -gx VIRTUAL_ENV "/home/fkk/codes/wagtail_practice/wagtail_site/.venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
