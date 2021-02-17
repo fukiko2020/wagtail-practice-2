@@ -2,8 +2,10 @@
 {% load static %}
 {% load wagtailcore_tags %}
 
-{% block content %}
-<div class="row">
-    {{page.content}}
+<div class="container-fluid">
+
+    {% block content %}
+    {{page.body}}
+    {% endblock content %}
+
 </div>
-{% endblock content %}

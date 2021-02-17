@@ -11,12 +11,7 @@ from wagtailcolumnblocks.blocks import ColumnsBlock
 
 
 class MyContentBlocks(blocks.StreamBlock):
-    """
-    The blocks you want to allow within each MyColumnBlocks column.
-    """
-
     image = ImageChooserBlock()
-    text = blocks.CharBlock()
     richtext = blocks.RichTextBlock()
 
 
@@ -29,15 +24,6 @@ class ThreeColumnBlocks(blocks.StreamBlock):
     )
 
 
-class ThreeColumnPage(Page):
-    content = fields.StreamField(ThreeColumnBlocks)
-
-    content_panels = [
-        FieldPanel('title'),
-        StreamFieldPanel('content')
-    ]
-
-
 class TwoColumnBlocks(blocks.StreamBlock):
     column_1_1 = ColumnsBlock(
         MyContentBlocks(),
@@ -48,13 +34,14 @@ class TwoColumnBlocks(blocks.StreamBlock):
 
 
 class MyColumnPage(Page):
-    two_column = fields.StreamField(TwoColumnBlocks)
-    three_column = fields.StreamField(ThreeColumnBlocks)
+    body = fields.StreamField([
+        ('two_column', TwoColumnBlocks(label='two column', required=False)),
+        ('three_column', ThreeColumnBlocks(label='three column', required=False)),
+    ])
 
     content_panels = [
         FieldPanel('title'),
-        StreamFieldPanel('two_column'),
-        StreamFieldPanel('three_column'),
+        StreamFieldPanel('body'),
     ]
 
 
