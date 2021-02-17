@@ -5,7 +5,6 @@
     <div class="row">
         {% for column, width in columns %}
         <div class="col-xs-12 col-md-4">
-            Column width = {{ width }}
             {% include_block column %}
         </div>
         {% endfor %}
