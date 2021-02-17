@@ -1,12 +1,14 @@
 from django.db import models
 
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
+from modelcluster.fields import ParentalKey
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.blocks import RawHTMLBlock, RichTextBlock
-from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, PageChooserPanel, StreamFieldPanel
+from wagtail.core.blocks import RawHTMLBlock, RichTextBlock, StreamBlock
+from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
+
+from wagtailcolumnblocks.blocks import ColumnsBlock
 
 
 class TopPage(Page):
@@ -41,6 +43,7 @@ class IndexPage(Page):
         InlinePanel('index_images', label='Index images')
     ]
 
+
 class IndexImages(Orderable):
     page = ParentalKey(IndexPage, on_delete=models.CASCADE, related_name='index_images')
     image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
@@ -50,6 +53,7 @@ class IndexImages(Orderable):
         ImageChooserPanel('image'),
         FieldPanel('caption'),
     ]
+
 
 class ContentsPage(Page):
     body = StreamField([
@@ -63,6 +67,7 @@ class ContentsPage(Page):
         InlinePanel('contents_images', label='Contents images'),
     ]
 
+
 class ContentsImages(Orderable):
     page = ParentalKey(ContentsPage, on_delete=models.CASCADE, related_name='contents_images')
     image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
@@ -72,3 +77,36 @@ class ContentsImages(Orderable):
     ]
 
 
+class MyContentBlocks(StreamBlock):
+    image = ImageChooserBlock()
+    richtext = RichTextBlock()
+
+
+class ThreeColumnBlocks(StreamBlock):
+    column_1_1_1 = ColumnsBlock(
+        MyContentBlocks(),
+        ratios=(1, 1, 1),
+        group="Columns",
+        template='cms/blocks/three_column_block.html',
+    )
+
+
+class TwoColumnBlocks(StreamBlock):
+    column_1_1 = ColumnsBlock(
+        MyContentBlocks(),
+        ratios=(1, 1),
+        group="Columns",
+        template='cms/blocks/two_column_block.html',
+    )
+
+
+class MyColumnPage(Page):
+    body = StreamField([
+        ('two_column', TwoColumnBlocks(label='two column', required=False)),
+        ('three_column', ThreeColumnBlocks(label='three column', required=False)),
+    ])
+
+    content_panels = [
+        FieldPanel('title'),
+        StreamFieldPanel('body'),
+    ]
