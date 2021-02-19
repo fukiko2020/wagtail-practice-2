@@ -82,8 +82,14 @@ class MyContentBlocks(StreamBlock):
     richtext = RichTextBlock()
 
 
-class ThreeColumnBlocks(StreamBlock):
-    column_1_1_1 = ColumnsBlock(
+class MyColumnBlocks(StreamBlock):
+    two_columns = ColumnsBlock(
+        MyContentBlocks(),
+        ratios=(1, 1),
+        group="Columns",
+        template='cms/blocks/two_column_block.html',
+    )
+    three_columns = ColumnsBlock(
         MyContentBlocks(),
         ratios=(1, 1, 1),
         group="Columns",
@@ -91,20 +97,8 @@ class ThreeColumnBlocks(StreamBlock):
     )
 
 
-class TwoColumnBlocks(StreamBlock):
-    column_1_1 = ColumnsBlock(
-        MyContentBlocks(),
-        ratios=(1, 1),
-        group="Columns",
-        template='cms/blocks/two_column_block.html',
-    )
-
-
 class MyColumnPage(Page):
-    body = StreamField([
-        ('two_column', TwoColumnBlocks(label='two column', required=False)),
-        ('three_column', ThreeColumnBlocks(label='three column', required=False)),
-    ])
+    body = StreamField(MyColumnBlocks)
 
     content_panels = [
         FieldPanel('title'),
