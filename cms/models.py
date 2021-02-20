@@ -55,28 +55,7 @@ class IndexImages(Orderable):
     ]
 
 
-class ContentsPage(Page):
-    body = StreamField([
-        ('rich_text', RichTextBlock(icon='doc_full', label='Rich Text', required=False)),
-        ('html', RawHTMLBlock(icon='code', label='Raw HTML', required=False)),
-        ('image', ImageChooserBlock(label='Image', required=False)),
-    ])
-
-    content_panels = Page.content_panels + [
-        StreamFieldPanel('body'),
-        InlinePanel('contents_images', label='Contents images'),
-    ]
-
-
-class ContentsImages(Orderable):
-    page = ParentalKey(ContentsPage, on_delete=models.CASCADE, related_name='contents_images')
-    image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
-
-    panels = [
-        ImageChooserPanel('image'),
-    ]
-
-
+# カラムを2分割・3分割に自由に設定できるページ
 class MyContentBlocks(StreamBlock):
     image = ImageChooserBlock()
     richtext = RichTextBlock()
@@ -104,3 +83,25 @@ class MyColumnPage(Page):
         FieldPanel('title'),
         StreamFieldPanel('body'),
     ]
+
+
+# class ContentsPage(Page):
+#     body = StreamField([
+#         ('rich_text', RichTextBlock(icon='doc_full', label='Rich Text', required=False)),
+#         ('html', RawHTMLBlock(icon='code', label='Raw HTML', required=False)),
+#         ('image', ImageChooserBlock(label='Image', required=False)),
+#     ])
+
+#     content_panels = Page.content_panels + [
+#         StreamFieldPanel('body'),
+#         InlinePanel('contents_images', label='Contents images'),
+#     ]
+
+
+# class ContentsImages(Orderable):
+#     page = ParentalKey(ContentsPage, on_delete=models.CASCADE, related_name='contents_images')
+#     image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
+
+#     panels = [
+#         ImageChooserPanel('image'),
+#     ]
