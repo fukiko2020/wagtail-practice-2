@@ -1,9 +1,11 @@
 from django.db import models
 
 from modelcluster.fields import ParentalKey
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from taggit.models import TaggedItemBase
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import RichTextField, StreamField
-from wagtail.core.blocks import RawHTMLBlock, RichTextBlock, StreamBlock
+from wagtail.core.blocks import RichTextBlock, StreamBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
@@ -43,6 +45,17 @@ class IndexPage(Page):
         InlinePanel('index_images', label='Index images')
     ]
 
+    def get_context(self, request):
+        context = super().get_context(request)
+
+        articles = MyColumnPage.objects.live()
+        tag = request.GET.get('tag')
+        if tag:
+            articles = articles.filter(tags__name=tag)
+
+        context['articles'] = articles
+        return context
+
 
 class IndexImages(Orderable):
     page = ParentalKey(IndexPage, on_delete=models.CASCADE, related_name='index_images')
@@ -76,32 +89,21 @@ class MyColumnBlocks(StreamBlock):
     )
 
 
+# タグづけ
+class MyColumnPageTag(TaggedItemBase):
+    content_object = ParentalKey('MyColumnPage', on_delete=models.CASCADE, related_name='tagged_items')
+
+
 class MyColumnPage(Page):
     body = StreamField(MyColumnBlocks)
+    tags = ClusterTaggableManager(through=MyColumnPageTag, blank=True)
 
     content_panels = [
         FieldPanel('title'),
         StreamFieldPanel('body'),
     ]
 
+    promote_panels = Page.promote_panels + [
+        FieldPanel('tags'),
+    ]
 
-# class ContentsPage(Page):
-#     body = StreamField([
-#         ('rich_text', RichTextBlock(icon='doc_full', label='Rich Text', required=False)),
-#         ('html', RawHTMLBlock(icon='code', label='Raw HTML', required=False)),
-#         ('image', ImageChooserBlock(label='Image', required=False)),
-#     ])
-
-#     content_panels = Page.content_panels + [
-#         StreamFieldPanel('body'),
-#         InlinePanel('contents_images', label='Contents images'),
-#     ]
-
-
-# class ContentsImages(Orderable):
-#     page = ParentalKey(ContentsPage, on_delete=models.CASCADE, related_name='contents_images')
-#     image = models.ForeignKey('wagtailimages.Image', on_delete=models.CASCADE, related_name='+')
-
-#     panels = [
-#         ImageChooserPanel('image'),
-#     ]

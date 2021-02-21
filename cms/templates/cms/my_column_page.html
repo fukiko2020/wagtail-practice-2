@@ -6,6 +6,11 @@
 
     {% block content %}
     {{page.body}}
+
+    {% for tag in page.tags.all %}
+    <a href="{% slugurl 'index' %}?tag={{tag}}">{{tag}}</a>
+    {% endfor %}
+    <a href="{% pageurl page.get_parent %}">Back to Welcome Page</a>
     {% endblock content %}
 
 </div>

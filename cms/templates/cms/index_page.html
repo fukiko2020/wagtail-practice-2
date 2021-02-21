@@ -4,8 +4,9 @@
 {% block content %}
 
     {{page.body|richtext}}
-    {% for item in page.index_images.all %}
-        {% image item.image fill-400x300 %}
+    {% for article in articles %}
+        <a href="{% pageurl article %}">{{article.title}}</a>
+        <br>
     {% endfor %}
 
 {% endblock %}
