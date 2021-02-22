@@ -28,12 +28,9 @@ class IndexPage(Page):
     def get_context(self, request):
         context = super().get_context(request)
 
-        articles = MyColumnPage.objects.live()
-        tag = request.GET.get('tag')
-        if tag:
-            articles = articles.filter(tags__name=tag)
-
-        context['articles'] = articles
+        context['category_1'] = MyColumnPage.objects.live().filter(category=1)
+        context['category_2'] = MyColumnPage.objects.live().filter(category=2)
+        context['category_3'] = MyColumnPage.objects.live().filter(category=3)
         return context
 
 
@@ -93,6 +90,7 @@ class MyColumnPageTag(TaggedItemBase):
 
 class MyColumnPage(Page):
     body = StreamField(MyColumnBlocks)
+    post_date = models.DateField(auto_now_add=True)
     category = models.ForeignKey(
         'Category',
         on_delete=models.SET_NULL,

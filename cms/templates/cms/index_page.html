@@ -4,9 +4,21 @@
 {% block content %}
 
     {{page.body|richtext}}
-    {% for article in articles %}
-        <a href="{% pageurl article %}">{{article.title}}</a>
+    <h4>category 1</h4>
+    {% for item in category_1 %}
+        <a href="{% pageurl item %}">{{item.title}}</a>
         <br>
     {% endfor %}
+    <h4>category 2</h4>
+    {% for item in category_2 %}
+        <a href="{% pageurl item %}">{{item.title}}</a>
+        <br>
+    {% endfor %}
+    <h4>category 3</h4>
+    {% for item in category_3 %}
+        <a href="{% pageurl item %}">{{item.title}}</a>
+        <br>
+    {% endfor %}
+
 
 {% endblock %}
