@@ -12,7 +12,7 @@
     {% for tag in page.tags.all %}
     <span>{{tag}}</span>
     {% endfor %}
-    <a href="{% pageurl page.get_parent %}">Back to Welcome Page</a>
+    <a href="{% slugurl 'index' %}">Back to Index</a>
     {% endblock content %}
 
 </div>
