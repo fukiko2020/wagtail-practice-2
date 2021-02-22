@@ -5,6 +5,7 @@
 <div class="container-fluid">
 
     {% block content %}
+    {{page.category}}
     {{page.body}}
 
     {% for tag in page.tags.all %}

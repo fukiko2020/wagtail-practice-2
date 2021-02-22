@@ -1,3 +1,4 @@
+from django import forms
 from django.db import models
 
 from modelcluster.fields import ParentalKey
@@ -9,6 +10,7 @@ from wagtail.core.blocks import RichTextBlock, StreamBlock
 from wagtail.admin.edit_handlers import FieldPanel, InlinePanel, StreamFieldPanel
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.images.blocks import ImageChooserBlock
+from wagtail.snippets.models import register_snippet
 
 from wagtailcolumnblocks.blocks import ColumnsBlock
 
@@ -45,6 +47,8 @@ class IndexPage(Page):
         InlinePanel('index_images', label='Index images')
     ]
 
+    # タグ指定されたらそのタグを持つ記事だけ表示するため←不要
+    # カテゴリーごとに表示できるようにする
     def get_context(self, request):
         context = super().get_context(request)
 
@@ -89,21 +93,42 @@ class MyColumnBlocks(StreamBlock):
     )
 
 
+@register_snippet
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+
+    panels = [FieldPanel('name')]
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name_plural = 'カテゴリー'
+
+
 # タグづけ
 class MyColumnPageTag(TaggedItemBase):
-    content_object = ParentalKey('MyColumnPage', on_delete=models.CASCADE, related_name='tagged_items')
+    content_object = ParentalKey(
+        'MyColumnPage',
+        on_delete=models.CASCADE,
+        related_name='tagged_items'
+    )
 
 
 class MyColumnPage(Page):
     body = StreamField(MyColumnBlocks)
+    category = models.ForeignKey(
+        'Category',
+        on_delete=models.SET_NULL,
+        related_name='category',
+        null=True
+    )
     tags = ClusterTaggableManager(through=MyColumnPageTag, blank=True)
 
     content_panels = [
         FieldPanel('title'),
-        StreamFieldPanel('body'),
-    ]
-
-    promote_panels = Page.promote_panels + [
+        FieldPanel('category', widget=forms.Select),
         FieldPanel('tags'),
+        StreamFieldPanel('body'),
     ]
 
