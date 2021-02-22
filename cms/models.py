@@ -15,30 +15,6 @@ from wagtail.snippets.models import register_snippet
 from wagtailcolumnblocks.blocks import ColumnsBlock
 
 
-class TopPage(Page):
-    intro = models.CharField(max_length=255)
-    main_body = RichTextField(blank=True)
-
-    content_panels = Page.content_panels + [
-        FieldPanel('intro'),
-        FieldPanel('main_body', classname="full"),
-        InlinePanel('top_images', label="Gallery images"),
-    ]
-
-
-class TopPageGalleryImage(Orderable):
-    page = ParentalKey(TopPage, on_delete=models.CASCADE, related_name='top_images')
-    image = models.ForeignKey(
-        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+',
-    )
-    caption = models.CharField(blank=True, max_length=250)
-
-    panels = [
-        ImageChooserPanel('image'),
-        FieldPanel('caption'),
-    ]
-
-
 class IndexPage(Page):
     body = RichTextField(max_length=1000)
 
@@ -131,4 +107,3 @@ class MyColumnPage(Page):
         FieldPanel('tags'),
         StreamFieldPanel('body'),
     ]
-
