@@ -123,6 +123,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ja'
 
+# LANGUAGES = WAGTAIL_CONTENT_LANGUAGES = [
+#     ('ja', ('Japanese')),
+#     ('en-us', ('English (United States)')),
+# ]
+
 TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
