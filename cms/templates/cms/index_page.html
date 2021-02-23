@@ -6,17 +6,28 @@
     {{page.body|richtext}}
     <h4>category 1</h4>
     {% for item in category_1 %}
-        <a href="{% pageurl item %}">{{item.title}}</a>
+    <a href="{% pageurl item %}">{{item.title}}</a>
+        {% for main in item.main_image.all %}
+            {% image main.image fill-100x100 %}
+        {% endfor %}
         <br>
     {% endfor %}
+
     <h4>category 2</h4>
     {% for item in category_2 %}
         <a href="{% pageurl item %}">{{item.title}}</a>
+        {% for main in item.main_image.all %}
+            {% image main.image fill-100x100 %}
+        {% endfor %}
         <br>
     {% endfor %}
+
     <h4>category 3</h4>
     {% for item in category_3 %}
         <a href="{% pageurl item %}">{{item.title}}</a>
+        {% for main in item.main_image.all %}
+            {% image main.image fill-100x100 %}
+        {% endfor %}
         <br>
     {% endfor %}
 

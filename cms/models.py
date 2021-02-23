@@ -23,7 +23,6 @@ class IndexPage(Page):
         InlinePanel('index_images', label='Index images')
     ]
 
-    # タグ指定されたらそのタグを持つ記事だけ表示するため←不要
     # カテゴリーごとに表示できるようにする
     def get_context(self, request):
         context = super().get_context(request)
@@ -104,4 +103,16 @@ class MyColumnPage(Page):
         FieldPanel('category', widget=forms.Select),
         FieldPanel('tags'),
         StreamFieldPanel('body'),
+        InlinePanel('main_image', label='アイキャッチ画像'),
+    ]
+
+
+class MyColumnPageImage(Orderable):
+    page = ParentalKey(MyColumnPage, on_delete=models.CASCADE, related_name='main_image', null=True, blank=True)
+    image = models.ForeignKey(
+        'wagtailimages.Image', on_delete=models.CASCADE, related_name='+'
+    )
+
+    panels = [
+        ImageChooserPanel('image'),
     ]

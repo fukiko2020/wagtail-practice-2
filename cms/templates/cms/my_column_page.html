@@ -1,16 +1,23 @@
 {% extends "base.html" %}
 {% load static %}
-{% load wagtailcore_tags %}
+{% load wagtailcore_tags wagtailimages_tags %}
 
 <div class="container-fluid">
 
     {% block content %}
-    {{page.category}}
+    <h1>{{page.title}}</h1>
+    {% for item in page.main_image.all %}
+    {% image item.image fill-320x320 %}
+    {% endfor %}
+    <br>
+    カテゴリー：{{page.category}}
+    <br>
     {{page.post_date}}
     {{page.body}}
 
+    タグ：
     {% for tag in page.tags.all %}
-    <span>{{tag}}</span>
+    <p>{{tag}}</p>
     {% endfor %}
     <a href="{% slugurl 'index' %}">Back to Index</a>
     {% endblock content %}
